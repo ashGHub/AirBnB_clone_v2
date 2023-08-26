@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
-from models.base_model import BaseModel, Base, Column, String, ForeignKey
+from models.base_model import BaseModel, Base, Column, String, ForeignKey, relationship
+
 
 
 class City(BaseModel, Base):
@@ -10,3 +11,5 @@ class City(BaseModel, Base):
 
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     name = Column(String(128), nullable=False)
+
+    places = relationship('Place', backref='city', cascade='all, delete, delete-orphan')

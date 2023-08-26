@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, DateTime, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 """SQLAlchemy Base class"""
