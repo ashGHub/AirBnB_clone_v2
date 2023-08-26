@@ -59,7 +59,7 @@ class DBStorage:
             cls_res = self.__session.query(cls).all()
             result.update({self.__build_dic_key(obj): obj for obj in cls_res})
         else:
-            types = [State, City, User, Place]
+            types = [State, City, User, Place, Review]
             for tp in types:
                 tp_res = self.__session.query(tp).all() 
                 result.update({self.__build_dic_key(obj): obj for obj in tp_res})

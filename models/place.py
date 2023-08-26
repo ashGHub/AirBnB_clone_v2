@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.base_model import BaseModel, Base, Column, String, Integer, Float, ForeignKey
+from models.base_model import BaseModel, Base, Column, String, Integer, Float, ForeignKey, relationship
 
 
 class Place(BaseModel, Base):
@@ -19,3 +19,10 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     amenity_ids = []
+
+    reviews = relationship('Review', backref='place', cascade='all, delete, delete-orphan')
+
+    @property
+    def reviews(self):
+        """ Returns the list of Review instances with place id equals to the current Place.id """
+        return [review for review in self.reviews]
