@@ -24,8 +24,23 @@ This repository contains the initial stage of a student project to build a clone
 <center> <h2>General Use</h2> </center>
 
 1. First clone this repository.
+2. Activate Your Virtual Environment
+```
+#1 initialize environment with the name .venv
+python3 -m venv .venv
 
-3. Once the repository is cloned locate the "console.py" file and run it as follows:
+#2 activate the environment
+# on window
+.venv\Scripts\activate
+# on macOS and Linux
+source .venv/bin/activate
+
+#3 install dependencies
+pip3 install -r requirements.txt
+
+```
+
+3. Once the repository is cloned and activate the virtual environment to install the dependencies, locate the "console.py" file and run it as follows:
 ```
 /AirBnB_clone$ ./console.py
 ```
