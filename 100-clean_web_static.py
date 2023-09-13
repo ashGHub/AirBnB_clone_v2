@@ -1,20 +1,21 @@
 #!/usr/bin/python3
-"""Fabric script that distributes an archive to a web server"""
+"""
+Fabric script that distributes an archive to a web server
+"""
 
 from fabric.api import *
 from os import path
 from datetime import datetime
 
 
+# private key file command argument, -I ~/.ssh/id_rsa
+# env.user = 'ubuntu'
+# env.hosts = ['3.85.54.213', '54.90.35.144']
+
 local_ips = ['localhost', '127.0.0.1']
-# deployment path
 web_static_folder = '/data/web_static'
 release_folder = f'{web_static_folder}/releases'
 symbolic_link = f'{web_static_folder}/current'
-
-env.user = 'ubuntu'
-env.hosts = ['3.85.54.213', '54.90.35.144']
-# private key file command argument, -I ~/.ssh/id_rsa
 
 
 def do_pack():
