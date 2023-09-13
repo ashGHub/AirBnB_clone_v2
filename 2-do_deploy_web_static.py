@@ -41,17 +41,17 @@ def do_deploy(archive_path):
             put(archive_path, "/tmp/")
 
         # create release folder
-        command(f"mkdir -p {new_release}")
+        command(f"sudo mkdir -p {new_release}")
         # unzip file to release folder
-        command(f"tar -xzf {zip_file_path} -C {new_release}")
+        command(f"sudo tar -xzf {zip_file_path} -C {new_release}")
         # delete zip file
-        command(f"rm {zip_file_path}")
+        command(f"sudo rm {zip_file_path}")
         # move files to release folder, take it out from web_static folder
-        command(f"cp -r {new_release}/web_static/* {new_release}/")
+        command(f"sudo cp -r {new_release}/web_static/* {new_release}/")
         # delete unziped web_static folder
-        command(f"rm -rf {new_release}/web_static")
+        command(f"sudo rm -rf {new_release}/web_static")
         # create new symbolic link
-        command(f"ln -sf {new_release} {symbolic_link}")
+        command(f"sudo ln -sf {new_release} {symbolic_link}")
         return True
     except Exception:
         return False
