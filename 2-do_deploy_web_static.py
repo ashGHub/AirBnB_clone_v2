@@ -6,7 +6,7 @@ This script is expected to run under a root user
 
 
 from fabric.api import *
-from os import path
+from os import path, getenv
 
 # private key file command argument, -I ~/.ssh/id_rsa
 # env.user = 'ubuntu'
@@ -29,7 +29,7 @@ def do_deploy(archive_path):
         zip_file_path = f"/tmp/{zip_file}"
         new_release = f"{release_folder}/{zip_file_name}"
 
-        is_local = env.host_string in local_ips
+        is_local = getenv("run_locally", None)
         # get command to use depending on local or remote
         command = local if is_local else run
 
