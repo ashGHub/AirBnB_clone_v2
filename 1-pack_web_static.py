@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
 Fabric script that archive web_static folder
+For local testing, expected to run using the sudo su user
 """
 
 

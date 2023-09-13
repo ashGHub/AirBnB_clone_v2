@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
 Fabric script that distributes an archive to a web server
+For local testing, expected to run using the sudo su user
 """
 
 from fabric.api import *
