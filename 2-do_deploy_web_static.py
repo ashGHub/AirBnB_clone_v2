@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""Fabric script that distributes an archive to a web server"""
+"""
+Fabric script that distributes an archive to a web server
+This script is expected to run under a root user
+"""
 
 
 from fabric.api import *
