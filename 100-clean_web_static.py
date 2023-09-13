@@ -41,9 +41,12 @@ def do_deploy(archive_path):
         zip_file = archive_path.split("/")[-1]
         zip_file_name = zip_file.split(".")[0]
         zip_file_path = f"/tmp/{zip_file}"
-        current_release = f"{release_folder}/{zip_file_name}"
+        new_release = f"{release_folder}/{zip_file_name}"
 
         is_local = env.host_string in local_ips
+        # get command to use depending on local or remote
+        command = local if is_local else run
+
         if is_local:
             # upload archive to /tmp/ directory
             local(f"cp {archive_path} /tmp/")
@@ -51,33 +54,32 @@ def do_deploy(archive_path):
             # upload archive to /tmp/ directory
             put(archive_path, "/tmp/")
 
-        # get command to use depending on local or remote
-        command = local if is_local else run
         # create release folder
-        command(f"mkdir -p {current_release}")
+        command(f"sudo mkdir -p {new_release}")
         # unzip file to release folder
-        command(f"tar -xzf {zip_file_path} -C {current_release}")
+        command(f"sudo tar -xzf {zip_file_path} -C {new_release}")
         # delete zip file
-        command(f"rm {zip_file_path}")
-        # move files to current release folder
-        command(f"mv {current_release}/web_static/* {current_release}/")
-        # delete web_static folder
-        command(f"rm -rf {current_release}/web_static")
-        # delete symbolic link
-        command(f"rm -rf {symbolic_link}")
+        command(f"sudo rm {zip_file_path}")
+        # move files to release folder, take it out from web_static folder
+        command(f"sudo cp -r {new_release}/web_static/* {new_release}/")
+        # delete unziped web_static folder
+        command(f"sudo rm -rf {new_release}/web_static")
         # create new symbolic link
-        command(f"ln -s {current_release} {symbolic_link}")
+        command(f"sudo ln -sf {new_release} {symbolic_link}")
         return True
     except Exception:
         return False
 
 
 def deploy():
-    """Creates and distributes an archive to a web server"""
-    archive_path = do_pack()
-    if archive_path is None:
+    """ Creates and distributes an archive to a web server """
+    try:
+        archive_path = do_pack()
+        if not archive_path:
+            return False
+        return do_deploy(archive_path)
+    except Exception:
         return False
-    return do_deploy(archive_path)
 
 
 def do_clean(number=0):
