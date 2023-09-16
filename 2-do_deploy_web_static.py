@@ -7,15 +7,31 @@ For local testing, expected to run using the sudo su user
 
 from fabric.api import *
 from os import path
+from datetime import datetime
 
-# private key file command argument, -I ~/.ssh/id_rsa
+# env.key_filename = '~/.ssh/id_rsa'
 # env.user = 'ubuntu'
 # env.hosts = ['3.85.54.213', '54.90.35.144']
+
 
 local_ips = ['localhost', '127.0.0.1']
 web_static_folder = '/data/web_static'
 release_folder = f'{web_static_folder}/releases'
 symbolic_link = f'{web_static_folder}/current'
+
+
+def do_pack():
+    """Generates a .tgz archive of web_static folder"""
+    try:
+        local("mkdir -p versions")
+        # Date format: YYYYMMDDHHMMSS, e.g. 20210202025436
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        file_path = f"versions/web_static_{date}.tgz"
+        # Assumes web_static is in the same folder as this script
+        local(f"tar -cvzf {file_path} web_static")
+        return file_path
+    except Exception:
+        return None
 
 
 def do_deploy(archive_path):
@@ -46,7 +62,7 @@ def do_deploy(archive_path):
         command(f"tar -xzf {zip_file_path} -C {new_release}")
         # delete zip file
         command(f"rm {zip_file_path}")
-        # move files to release folder, take it out from web_static folder
+        # copy files to release folder from web static folder
         command(f"cp -r {new_release}/web_static/* {new_release}/")
         # delete unziped web_static folder
         command(f"rm -rf {new_release}/web_static")
