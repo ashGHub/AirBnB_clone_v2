@@ -27,16 +27,19 @@ This repository contains the initial stage of a student project to build a clone
 2. Activate Your Virtual Environment
 ```
 #1 initialize environment with the name .venv
-python3 -m venv .venv
+> python3 -m venv .venv
 
 #2 activate the environment
 # on window
-.venv\Scripts\activate
+> .venv\Scripts\activate
 # on macOS and Linux
-source .venv/bin/activate
+> source .venv/bin/activate
 
 #3 install dependencies
-pip3 install -r requirements.txt
+> pip3 install -r requirements.txt
+
+#4 when ever you install new dependencies run the following on the root folder of the project
+> pip3 freeze > requirements.txt
 
 ```
 
