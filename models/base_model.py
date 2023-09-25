@@ -55,8 +55,10 @@ class BaseModel:
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
+        if ('created_at' in dictionary):
+            dictionary['created_at'] = self.created_at.isoformat()
+        if ('updated_at' in dictionary):
+            dictionary['updated_at'] = self.updated_at.isoformat()
         if '_sa_instance_state' in dictionary:
             dictionary.pop('_sa_instance_state')
         if '__class__' in dictionary:

@@ -11,26 +11,32 @@ class FileStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
-            return {key: value for key, value in FileStorage.__objects.items() if isinstance(value, cls)}
+            return {key: value for key, value in FileStorage.__objects.items()
+                    if isinstance(value, cls)}
         return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        self.all().update({obj.__class__.__name__ + '.' + obj.id: obj})
 
     def delete(self, obj=None):
         """Deletes an object from storage dictionary"""
         if obj:
-            self.all().pop(obj.to_dict()['__class__'] + '.' + obj.id, None)
+            self.all().pop(obj.__class__.__name__ + '.' + obj.id, None)
 
     def save(self):
         """Saves storage dictionary to file"""
         with open(FileStorage.__file_path, 'w') as f:
             temp = {}
+            # work on the copy of __objects
             temp.update(FileStorage.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
             json.dump(temp, f)
+
+    def close(self):
+        """Deserializes the JSON file to objects"""
+        self.reload()
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -52,6 +58,6 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
