@@ -11,12 +11,6 @@ def hello():
     return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    """Display HBNB"""
-    return 'HBNB'
-
-
 @app.route('/c/<text>', strict_slashes=False)
 def c(text):
     """Display C followed by the value of the text variable"""
