@@ -9,14 +9,15 @@ from os import path
 from datetime import datetime
 
 
-# private key file command argument, -I ~/.ssh/id_rsa
+# env.key_filename = '~/.ssh/id_rsa'
 # env.user = 'ubuntu'
 # env.hosts = ['3.85.54.213', '54.90.35.144']
 
+
 local_ips = ['localhost', '127.0.0.1']
 web_static_folder = '/data/web_static'
-release_folder = f'{web_static_folder}/releases'
-symbolic_link = f'{web_static_folder}/current'
+release_folder = '{}/releases'.format(web_static_folder)
+symbolic_link = '{}/current'.format(web_static_folder)
 
 
 def do_pack():
@@ -25,9 +26,9 @@ def do_pack():
         local("mkdir -p versions")
         # Date format: YYYYMMDDHHMMSS, e.g. 20210202025436
         date = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_path = f"versions/web_static_{date}.tgz"
+        file_path = "versions/web_static_{}.tgz".format(date)
         # Assumes web_static is in the same folder as this script
-        local(f"tar -cvzf {file_path} web_static")
+        local("tar -cvzf {} web_static".format(file_path))
         return file_path
     except Exception:
         return None
@@ -41,8 +42,8 @@ def do_deploy(archive_path):
         # extract zip file info
         zip_file = archive_path.split("/")[-1]
         zip_file_name = zip_file.split(".")[0]
-        zip_file_path = f"/tmp/{zip_file}"
-        new_release = f"{release_folder}/{zip_file_name}"
+        zip_file_path = "/tmp/{}".format(zip_file)
+        new_release = "{}/{}".format(release_folder, zip_file_name)
 
         is_local = env.host_string in local_ips
         # get command to use depending on local or remote
@@ -50,23 +51,23 @@ def do_deploy(archive_path):
 
         if is_local:
             # upload archive to /tmp/ directory
-            local(f"cp {archive_path} /tmp/")
+            local("cp {} /tmp/".format(archive_path))
         else:
             # upload archive to /tmp/ directory
             put(archive_path, "/tmp/")
 
         # create release folder
-        command(f"mkdir -p {new_release}")
+        command("mkdir -p {}".format(new_release))
         # unzip file to release folder
-        command(f"tar -xzf {zip_file_path} -C {new_release}")
+        command("tar -xzf {} -C {}".format(zip_file_path, new_release))
         # delete zip file
-        command(f"rm {zip_file_path}")
-        # move files to release folder, take it out from web_static folder
-        command(f"cp -r {new_release}/web_static/* {new_release}/")
+        command("rm {}".format(zip_file_path))
+        # copy files to release folder from web static folder
+        command("cp -r {}/web_static/* {}/".format(new_release, new_release))
         # delete unziped web_static folder
-        command(f"rm -rf {new_release}/web_static")
+        command("rm -rf {}/web_static".format(new_release))
         # create new symbolic link
-        command(f"ln -sf {new_release} {symbolic_link}")
+        command("ln -sf {} {}".format(new_release, symbolic_link))
         return True
     except Exception:
         return False

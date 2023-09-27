@@ -15,9 +15,9 @@ def do_pack():
         local("mkdir -p versions")
         # Date format: YYYYMMDDHHMMSS, e.g. 20210202025436
         date = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_path = f"versions/web_static_{date}.tgz"
+        file_path = "versions/web_static_{}.tgz".format(date)
         # Assumes web_static is in the same folder as this script
-        local(f"tar -cvzf {file_path} web_static")
+        local("tar -cvzf {} web_static".format(file_path))
         return file_path
     except Exception:
         return None
