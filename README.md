@@ -31,7 +31,7 @@ This repository contains the initial stage of a student project to build a clone
 
 #2 activate the environment
 # on window
-> .venv\Scripts\activate
+> .venv/Scripts/activate
 # on macOS and Linux
 > source .venv/bin/activate
 
