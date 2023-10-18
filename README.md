@@ -35,6 +35,11 @@ This repository contains the initial stage of a student project to build a clone
 # on macOS and Linux
 > source .venv/bin/activate
 
+Before going to the next step, make sure the following is installed.<br>
+	pip install wheel
+	sudo apt-get install libmysqlclient-dev
+
+
 #3 install dependencies
 > pip3 install -r requirements.txt
 
